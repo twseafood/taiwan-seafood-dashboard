@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魚價查詢 - 台灣海鮮儀表板</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">🐟 台灣海鮮儀表板</a>
+    <nav class="nav-links">
+      <a href="index.html">首頁</a>
+      <a href="prices.html" class="active">魚價查詢</a>
+      <a href="calendar.html">漁業月曆</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">魚價查詢</h1>
+  <p class="page-subtitle" id="range-caption">載入中…</p>
+
+  <div class="card">
+    <div class="filters">
+      <div class="filter-group">
+        <label for="f-species">魚種</label>
+        <select id="f-species"><option value="">全部魚種</option></select>
+      </div>
+      <div class="filter-group">
+        <label for="f-market">市場</label>
+        <select id="f-market"><option value="">全部市場</option></select>
+      </div>
+      <div class="filter-group">
+        <label for="f-start">開始日期</label>
+        <input type="date" id="f-start">
+      </div>
+      <div class="filter-group">
+        <label for="f-end">結束日期</label>
+        <input type="date" id="f-end">
+      </div>
+      <div class="filter-group">
+        <button id="btn-search">查詢</button>
+      </div>
+      <div class="filter-group">
+        <button id="btn-reset" class="secondary">重設</button>
+      </div>
+    </div>
+    <p style="font-size:0.85rem;color:var(--muted);">同時選定「單一魚種＋單一市場」時，下方會顯示價格趨勢圖。品種代碼與名稱是一對一的（同名不同代碼會列成不同選項），詳見資料筆記。</p>
+  </div>
+
+  <div class="card" id="chart-card" style="display:none;">
+    <h2 id="chart-title">價格走勢</h2>
+    <div class="chart-wrap"><canvas id="price-chart"></canvas></div>
+  </div>
+
+  <div class="card">
+    <p class="page-subtitle" id="result-caption"></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>日期</th><th>市場</th><th>魚貨名稱</th><th>代碼</th><th>上價</th><th>中價</th><th>下價</th><th>平均價</th><th>交易量(kg)</th></tr>
+        </thead>
+        <tbody id="result-tbody">
+          <tr><td colspan="9" class="loading">載入中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  資料來源：農業部漁業署漁產品交易行情OpenData。0元的上/中/下價可能代表當日該價格區間無成交，非真實零元。
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/prices.js"></script>
+</body>
+</html>

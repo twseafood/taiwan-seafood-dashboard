@@ -1,0 +1,67 @@
+name: 更新漁產品交易行情資料
+
+on:
+  schedule:
+    # 每天台北時間 07:10 執行（UTC 23:10 為前一天）
+    - cron: "10 23 * * *"
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "要抓最近幾天的資料（含今天）"
+        default: "5"
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 抓取最近資料
+        id: fetch
+        continue-on-error: true
+        run: |
+          mkdir -p /tmp/incoming
+          python scripts/fetch_aquatic_data.py \
+            --days "${{ github.event.inputs.days || '5' }}" \
+            --top 5000 \
+            -o /tmp/incoming/latest.json
+
+      - name: 若抓取失敗則記錄並停止（保留舊資料，不覆蓋網站）
+        if: steps.fetch.outcome == 'failure'
+        run: |
+          echo "::warning::抓取失敗（很可能是 data.moa.gov.tw 擋掉了 GitHub Actions 的自動化請求）。本次不更新資料，維持現有 docs/data 內容。"
+          exit 0
+
+      - name: 整理資料到 docs/data
+        if: steps.fetch.outcome == 'success'
+        run: |
+          python scripts/process_data.py --extra /tmp/incoming/latest.json
+
+      - name: 檢查是否有變更
+        if: steps.fetch.outcome == 'success'
+        id: git-check
+        run: |
+          git add docs/data
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit 並 push
+        if: steps.fetch.outcome == 'success' && steps.git-check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: 自動更新漁產品交易行情資料 $(date -u +%Y-%m-%d)"
+          git push

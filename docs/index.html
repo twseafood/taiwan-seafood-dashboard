@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台灣海鮮儀表板</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">🐟 台灣海鮮儀表板</a>
+    <nav class="nav-links">
+      <a href="index.html" class="active">首頁</a>
+      <a href="prices.html">魚價查詢</a>
+      <a href="calendar.html">漁業月曆</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">台灣海鮮儀表板</h1>
+  <p class="page-subtitle">資料來源：農業部漁業署「漁產品交易行情」OpenData ＋《年年有魚》漁業月曆</p>
+
+  <div id="update-notice" class="notice" style="display:none;"></div>
+
+  <div class="stat-grid" id="stat-grid">
+    <div class="stat-card"><div class="num">–</div><div class="label">交易紀錄筆數</div></div>
+    <div class="stat-card"><div class="num">–</div><div class="label">魚種代碼數</div></div>
+    <div class="stat-card"><div class="num">–</div><div class="label">市場數</div></div>
+    <div class="stat-card"><div class="num">–</div><div class="label">最新資料日期</div></div>
+  </div>
+
+  <div class="card" id="month-card">
+    <h2>本月推薦魚種</h2>
+    <div class="loading">載入中…</div>
+  </div>
+
+  <div class="card">
+    <h2>最新交易快照</h2>
+    <p class="page-subtitle" id="latest-caption" style="margin-bottom:0.6rem;"></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>市場</th><th>魚貨名稱</th><th>上價</th><th>中價</th><th>下價</th><th>平均價</th><th>交易量(kg)</th></tr>
+        </thead>
+        <tbody id="latest-tbody">
+          <tr><td colspan="7" class="loading">載入中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:0.8rem;"><a href="prices.html">前往完整魚價查詢 →</a></p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  資料來源：<a href="https://data.moa.gov.tw/open_detail.aspx?id=039" target="_blank" rel="noopener">農業部漁業署漁產品交易行情OpenData</a>、
+  農業部漁業署《年年有魚》漁業月曆。本站資料由 GitHub Actions 排程自動更新，實際更新時間請見上方頁面提示。
+</footer>
+
+<script src="assets/js/common.js"></script>
+<script>
+(async function () {
+  try {
+    const meta = await DataAPI.getMeta();
+    const grid = document.getElementById("stat-grid");
+    grid.innerHTML = `
+      <div class="stat-card"><div class="num">${meta.recordCount.toLocaleString()}</div><div class="label">交易紀錄筆數</div></div>
+      <div class="stat-card"><div class="num">${meta.speciesCount}</div><div class="label">魚種代碼數</div></div>
+      <div class="stat-card"><div class="num">${meta.marketCount}</div><div class="label">市場數</div></div>
+      <div class="stat-card"><div class="num">${formatDateTW(meta.latestDate)}</div><div class="label">最新資料日期</div></div>
+    `;
+
+    const notice = document.getElementById("update-notice");
+    const generated = new Date(meta.generatedAt);
+    const ageDays = (Date.now() - generated.getTime()) / (1000 * 60 * 60 * 24);
+    notice.style.display = "block";
+    if (ageDays > 3) {
+      notice.textContent = `⚠️ 資料已經 ${ageDays.toFixed(1)} 天沒有更新（上次產生時間：${formatDateTime(meta.generatedAt)}）。這通常代表 GitHub Actions 排程抓取被來源網站擋下，可以到 Actions 頁籤查看失敗紀錄。`;
+    } else {
+      notice.textContent = `資料最後更新於 ${formatDateTime(meta.generatedAt)}，涵蓋 ${meta.dateRange.start} ~ ${meta.dateRange.end}（其中有交易紀錄的天數：${meta.datesWithData.length} 天，週末與國定假日通常無資料屬正常現象）。`;
+    }
+
+    // latest snapshot table
+    const latest = await DataAPI.getLatest();
+    document.getElementById("latest-caption").textContent = `${formatDateTW(latest.date)} 全市場交易快照（共 ${latest.records.length} 筆，僅顯示前 15 筆）`;
+    const tbody = document.getElementById("latest-tbody");
+    if (latest.records.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" class="empty-state">尚無資料</td></tr>`;
+    } else {
+      tbody.innerHTML = latest.records.slice(0, 15).map(r => `
+        <tr>
+          <td>${r.market}</td>
+          <td>${r.speciesName}</td>
+          <td>${money(r.priceHigh)}</td>
+          <td>${money(r.priceMid)}</td>
+          <td>${money(r.priceLow)}</td>
+          <td>${money(r.avgPrice)}</td>
+          <td>${money(r.volume)}</td>
+        </tr>
+      `).join("");
+    }
+
+    // 本月推薦魚種
+    const calendar = await DataAPI.getFishCalendar();
+    const thisMonth = new Date().getMonth() + 1;
+    const monthData = calendar.月曆資料.find(m => m.月份 === thisMonth);
+    const monthCard = document.getElementById("month-card");
+    if (monthData) {
+      const origins = monthData.主要產地
+        ? monthData.主要產地.map(o => `<span class="badge">${o}</span>`).join("")
+        : `<span class="badge muted">尚無比對到的產地資料</span>`;
+      const species = monthData.推薦魚種.map(sp => `
+        <div class="species-chip">${sp.中文名}<span class="en">${sp.英文名}</span></div>
+      `).join("");
+      monthCard.innerHTML = `
+        <h2>${monthData.月份名稱}推薦：${monthData.主題分類}</h2>
+        <p class="page-subtitle" style="margin:0.2rem 0;">「${monthData.盛產季}」・推薦料理：${monthData.推薦料理}</p>
+        <div>${origins}</div>
+        <div class="species-chip-list">${species}</div>
+        <p style="margin-top:0.8rem;"><a href="calendar.html">查看完整12個月漁業月曆 →</a></p>
+      `;
+    } else {
+      monthCard.innerHTML = `<p class="empty-state">找不到本月的月曆資料</p>`;
+    }
+  } catch (err) {
+    console.error(err);
+    document.getElementById("stat-grid").innerHTML = `<div class="empty-state">資料載入失敗：${err.message}</div>`;
+  }
+})();
+</script>
+</body>
+</html>

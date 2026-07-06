@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>漁業月曆 - 台灣海鮮儀表板</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">🐟 台灣海鮮儀表板</a>
+    <nav class="nav-links">
+      <a href="index.html">首頁</a>
+      <a href="prices.html">魚價查詢</a>
+      <a href="calendar.html" class="active">漁業月曆</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title">漁業月曆</h1>
+  <p class="page-subtitle">資料來源：農業部漁業署《年年有魚》2026年漁業月曆，逐頁人工判讀整理</p>
+
+  <div class="notice">
+    「主要產地」是用推薦魚種名稱關鍵字，跟月曆封底「臺灣附近海域主要經濟性魚種」地圖做粗略字串比對後自動填入，<strong>不是官方逐魚種產地資料</strong>，僅供參考；沒有比對到的月份會顯示「尚無比對資料」。
+  </div>
+
+  <div class="calendar-grid" id="calendar-grid">
+    <div class="loading">載入中…</div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  資料來源：農業部漁業署《年年有魚》漁業月曆（民國115年版）。四月主題為觀賞魚，非食用漁產，如實收錄。
+</footer>
+
+<script src="assets/js/common.js"></script>
+<script>
+(async function () {
+  const grid = document.getElementById("calendar-grid");
+  try {
+    const calendar = await DataAPI.getFishCalendar();
+    const thisMonth = new Date().getMonth() + 1;
+    grid.innerHTML = calendar.月曆資料.map(m => {
+      const isCurrent = m.月份 === thisMonth;
+      const origins = m.主要產地
+        ? m.主要產地.map(o => `<span class="badge">${o}</span>`).join("")
+        : `<span class="badge muted">尚無比對資料</span>`;
+      const species = m.推薦魚種.map(sp => `
+        <div class="species-chip">${sp.中文名}<span class="en">${sp.英文名}</span></div>
+      `).join("");
+      const note = m.備註 ? `<p style="font-size:0.82rem;color:var(--muted);">${m.備註}</p>` : "";
+      return `
+        <div class="month-card ${isCurrent ? "current" : ""}">
+          <h3>${m.月份名稱}${isCurrent ? "（本月）" : ""}</h3>
+          <p class="slogan">「${m.盛產季}」</p>
+          <div class="badge coral">${m.主題分類}</div>
+          ${origins}
+          ${note}
+          <div class="species-chip-list">${species}</div>
+          <p class="recipe">🍽 推薦料理：${m.推薦料理}</p>
+        </div>
+      `;
+    }).join("");
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = `<div class="empty-state">資料載入失敗：${err.message}</div>`;
+  }
+})();
+</script>
+</body>
+</html>
