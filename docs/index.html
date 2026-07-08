@@ -37,15 +37,15 @@
   </div>
 
   <div class="card">
-    <h2>最新交易快照</h2>
+    <h2>今日跌價優先出清榜</h2>
     <p class="page-subtitle" id="latest-caption" style="margin-bottom:0.6rem;"></p>
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>市場</th><th>魚貨名稱</th><th>上價</th><th>中價</th><th>下價</th><th>平均價</th><th>交易量(kg)</th></tr>
+          <tr><th>市場</th><th>魚貨名稱</th><th>平均價</th><th>漲跌</th><th>上價</th><th>中價</th><th>下價</th><th>交易量(kg)</th></tr>
         </thead>
         <tbody id="latest-tbody">
-          <tr><td colspan="7" class="loading">載入中…</td></tr>
+          <tr><td colspan="8" class="loading">載入中…</td></tr>
         </tbody>
       </table>
     </div>
@@ -81,21 +81,22 @@
       notice.textContent = `資料最後更新於 ${formatDateTime(meta.generatedAt)}，涵蓋 ${meta.dateRange.start} ~ ${meta.dateRange.end}（其中有交易紀錄的天數：${meta.datesWithData.length} 天，週末與國定假日通常無資料屬正常現象）。`;
     }
 
-    // latest snapshot table
+    // 跌價優先出清榜（latest.json 已依跌幅排序，跌最多排最前）
     const latest = await DataAPI.getLatest();
-    document.getElementById("latest-caption").textContent = `${formatDateTW(latest.date)} 全市場交易快照（共 ${latest.records.length} 筆，僅顯示前 15 筆）`;
+    document.getElementById("latest-caption").textContent = `${formatDateTW(latest.date)} 全市場交易快照，依「與上一個有交易紀錄日期」相比的跌幅排序，跌最多、最需要出清的排最前面（共 ${latest.records.length} 筆，僅顯示前 15 筆）`;
     const tbody = document.getElementById("latest-tbody");
     if (latest.records.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="empty-state">尚無資料</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="empty-state">尚無資料</td></tr>`;
     } else {
-      tbody.innerHTML = latest.records.slice(0, 15).map(r => `
+      tbody.innerHTML = latest.records.slice(0, 15).map((r, i) => `
         <tr>
           <td>${r.market}</td>
-          <td>${r.speciesName}</td>
+          <td>${i < 3 && r.direction === "down" ? '<span class="urgent-badge">急售</span>' : ""}${r.speciesName}</td>
+          <td>${money(r.avgPrice)}</td>
+          <td>${priceChangeBadge(r)}</td>
           <td>${money(r.priceHigh)}</td>
           <td>${money(r.priceMid)}</td>
           <td>${money(r.priceLow)}</td>
-          <td>${money(r.avgPrice)}</td>
           <td>${money(r.volume)}</td>
         </tr>
       `).join("");
@@ -111,7 +112,7 @@
         ? monthData.主要產地.map(o => `<span class="badge">${o}</span>`).join("")
         : `<span class="badge muted">尚無比對到的產地資料</span>`;
       const species = monthData.推薦魚種.map(sp => `
-        <div class="species-chip">${sp.中文名}<span class="en">${sp.英文名}</span></div>
+        <div class="species-chip">${sp.中文名}</div>
       `).join("");
       monthCard.innerHTML = `
         <h2>${monthData.月份名稱}推薦：${monthData.主題分類}</h2>

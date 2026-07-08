@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="480" height="480">
+  <!-- Q版海洋浮水印圖樣：漁船、台灣漁工、印尼漁工、魚、浪花，低透明度平鋪用 -->
+  <g fill="none" stroke="#0b3d5c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.1">
+
+    <!-- ===== 元素1：Ｑ版漁船（左上）===== -->
+    <g transform="translate(40,50)">
+      <!-- 船身 -->
+      <path d="M0,40 Q4,58 26,58 L74,58 Q96,58 100,40 Z" fill="#0b3d5c" opacity="0.5" stroke="none"/>
+      <path d="M0,40 Q4,58 26,58 L74,58 Q96,58 100,40" />
+      <!-- 船艙 -->
+      <rect x="28" y="16" width="26" height="24" rx="4" fill="#0b3d5c" opacity="0.5" stroke="none"/>
+      <rect x="28" y="16" width="26" height="24" rx="4"/>
+      <circle cx="41" cy="28" r="4" fill="none"/>
+      <!-- 桅杆與旗子 -->
+      <line x1="70" y1="40" x2="70" y2="4"/>
+      <path d="M70,4 L88,10 L70,16 Z" fill="#e2725b" opacity="0.6" stroke="none"/>
+      <!-- 船下浪花 -->
+      <path d="M-10,64 q10,-8 20,0 q10,-8 20,0 q10,-8 20,0 q10,-8 20,0 q10,-8 20,0 q10,-8 20,0" />
+    </g>
+
+    <!-- ===== 元素2：Ｑ版台灣漁工（右上，戴斗笠）===== -->
+    <g transform="translate(230,30)">
+      <!-- 斗笠 -->
+      <path d="M-2,26 Q30,-6 62,26 Z" fill="#0b3d5c" opacity="0.5" stroke="none"/>
+      <path d="M-2,26 Q30,-6 62,26 Z"/>
+      <ellipse cx="30" cy="26" rx="34" ry="5"/>
+      <!-- 頭 -->
+      <circle cx="30" cy="40" r="14" fill="#fff" opacity="0.9" stroke="#0b3d5c"/>
+      <!-- 身體 -->
+      <path d="M12,54 Q30,46 48,54 L52,92 Q30,100 8,92 Z" fill="#0b3d5c" opacity="0.5" stroke="none"/>
+      <path d="M12,54 Q30,46 48,54 L52,92 Q30,100 8,92 Z"/>
+      <!-- 釣竿與釣線 -->
+      <line x1="48" y1="60" x2="78" y2="40"/>
+      <path d="M78,40 q6,20 -2,42" stroke-dasharray="2,4"/>
+      <circle cx="76" cy="82" r="2" fill="#0b3d5c" stroke="none"/>
+    </g>
+
+    <!-- ===== 元素3：Ｑ版小魚（中間偏左）===== -->
+    <g transform="translate(90,190)">
+      <path d="M0,14 Q20,-6 50,14 Q20,34 0,14 Z" fill="#4fa5c9" opacity="0.6" stroke="none"/>
+      <path d="M0,14 Q20,-6 50,14 Q20,34 0,14 Z"/>
+      <path d="M0,14 L-16,2 L-16,26 Z" fill="#4fa5c9" opacity="0.6" stroke="none"/>
+      <path d="M0,14 L-16,2 L-16,26 Z"/>
+      <circle cx="38" cy="10" r="2" fill="#0b3d5c" stroke="none"/>
+      <path d="M20,4 Q26,-4 32,2" />
+    </g>
+
+    <!-- ===== 元素4：Ｑ版印尼漁工（中間，戴頭巾）===== -->
+    <g transform="translate(190,210)">
+      <!-- 頭 -->
+      <circle cx="30" cy="26" r="14" fill="#fff" opacity="0.9" stroke="#0b3d5c"/>
+      <!-- 頭巾（後方打結） -->
+      <path d="M14,18 Q30,2 46,18 Q46,10 30,8 Q14,10 14,18 Z" fill="#0b3d5c" opacity="0.5" stroke="none"/>
+      <path d="M14,18 Q30,2 46,18 Q46,10 30,8 Q14,10 14,18 Z"/>
+      <path d="M44,16 q10,4 6,16" />
+      <!-- 身體（沙龍紋樣下擺） -->
+      <path d="M12,40 Q30,32 48,40 L54,78 Q30,88 6,78 Z" fill="#0b3d5c" opacity="0.5" stroke="none"/>
+      <path d="M12,40 Q30,32 48,40 L54,78 Q30,88 6,78 Z"/>
+      <path d="M10,66 L50,66 M8,74 L52,74" stroke-dasharray="3,5"/>
+      <!-- 提著魚簍 -->
+      <path d="M52,55 q14,0 14,14 q0,10 -14,10 Z" fill="#e2725b" opacity="0.5" stroke="none"/>
+      <path d="M52,55 q14,0 14,14 q0,10 -14,10 Z"/>
+    </g>
+
+    <!-- ===== 元素5：浪花線條（右下）===== -->
+    <g transform="translate(300,300)">
+      <path d="M-20,20 q10,-10 20,0 q10,-10 20,0 q10,-10 20,0 q10,-10 20,0 q10,-10 20,0" />
+      <path d="M-20,36 q10,-10 20,0 q10,-10 20,0 q10,-10 20,0 q10,-10 20,0 q10,-10 20,0" opacity="0.6"/>
+    </g>
+
+    <!-- ===== 元素6：第二艘小漁船（左下）===== -->
+    <g transform="translate(30,330) scale(0.75)">
+      <path d="M0,40 Q4,58 26,58 L74,58 Q96,58 100,40 Z" fill="#0b3d5c" opacity="0.5" stroke="none"/>
+      <path d="M0,40 Q4,58 26,58 L74,58 Q96,58 100,40" />
+      <rect x="28" y="16" width="26" height="24" rx="4" fill="#0b3d5c" opacity="0.5" stroke="none"/>
+      <rect x="28" y="16" width="26" height="24" rx="4"/>
+      <line x1="70" y1="40" x2="70" y2="4"/>
+      <path d="M70,4 L88,10 L70,16 Z" fill="#4fa5c9" opacity="0.6" stroke="none"/>
+    </g>
+
+    <!-- ===== 元素7：第二隻小魚（右上角補位）===== -->
+    <g transform="translate(400,150) scale(0.7)">
+      <path d="M0,14 Q20,-6 50,14 Q20,34 0,14 Z" fill="#e2725b" opacity="0.5" stroke="none"/>
+      <path d="M0,14 Q20,-6 50,14 Q20,34 0,14 Z"/>
+      <path d="M0,14 L-16,2 L-16,26 Z" fill="#e2725b" opacity="0.5" stroke="none"/>
+      <path d="M0,14 L-16,2 L-16,26 Z"/>
+    </g>
+
+  </g>
+</svg>

@@ -45,3 +45,15 @@ function money(n) {
 function primaryName(nameStr) {
   return (nameStr || "").split("、")[0];
 }
+
+// 台股慣例：紅漲、綠跌。回傳可直接塞進表格儲存格的 HTML。
+function priceChangeBadge(r, opts) {
+  opts = opts || {};
+  if (r.direction === "new" || r.changePct === null || r.changePct === undefined) {
+    return `<span class="price-change new">— <span class="prev-date">(無比較基準)</span></span>`;
+  }
+  const arrow = r.direction === "up" ? "▲" : (r.direction === "down" ? "▼" : "—");
+  const sign = r.changePct > 0 ? "+" : "";
+  const prevInfo = opts.showPrevDate === false ? "" : `<span class="prev-date">較${formatDateTW(r.prevDate)}</span>`;
+  return `<span class="price-change ${r.direction}">${arrow} ${sign}${r.changePct}%${prevInfo}</span>`;
+}

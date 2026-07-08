@@ -48,7 +48,7 @@
         ? m.主要產地.map(o => `<span class="badge">${o}</span>`).join("")
         : `<span class="badge muted">尚無比對資料</span>`;
       const species = m.推薦魚種.map(sp => `
-        <div class="species-chip">${sp.中文名}<span class="en">${sp.英文名}</span></div>
+        <div class="species-chip">${sp.中文名}</div>
       `).join("");
       const note = m.備註 ? `<p style="font-size:0.82rem;color:var(--muted);">${m.備註}</p>` : "";
       return `

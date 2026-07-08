@@ -104,6 +104,31 @@ def main():
 
     history = sorted(merged.values(), key=lambda x: (x["date"], x["speciesCode"], x["market"]))
 
+    # ---- 漲跌幅：跟「同一魚種代碼＋同一市場」前一個有交易紀錄的日期比較 ----
+    # （不是單純昨天，因為休市/個別市場不是每天都有申報，見 data_notes.md）
+    by_group = {}
+    for r in history:
+        by_group.setdefault((r["speciesCode"], r["market"]), []).append(r)
+    for group_rows in by_group.values():
+        group_rows.sort(key=lambda x: x["date"])
+        prev = None
+        for r in group_rows:
+            if prev is not None and prev["avgPrice"]:
+                change_abs = round(r["avgPrice"] - prev["avgPrice"], 2)
+                change_pct = round(change_abs / prev["avgPrice"] * 100, 2)
+                r["prevDate"] = prev["date"]
+                r["prevAvgPrice"] = prev["avgPrice"]
+                r["changeAbs"] = change_abs
+                r["changePct"] = change_pct
+                r["direction"] = "up" if change_abs > 0 else ("down" if change_abs < 0 else "flat")
+            else:
+                r["prevDate"] = None
+                r["prevAvgPrice"] = None
+                r["changeAbs"] = None
+                r["changePct"] = None
+                r["direction"] = "new"
+            prev = r
+
     # ---- species.json ----
     species_map = {r["speciesCode"]: r["speciesName"] for r in history}
     species = [{"code": c, "name": n} for c, n in sorted(species_map.items())]
@@ -117,9 +142,10 @@ def main():
         s["lastDate"] = max(s["lastDate"], r["date"])
     markets = [{"name": m, **stats} for m, stats in sorted(market_stats.items(), key=lambda x: -x[1]["count"])]
 
-    # ---- latest.json ----
+    # ---- latest.json：依跌幅排序，跌最多（最需要出清）排最前面，沒有比較基準的排最後 ----
     latest_date = max(r["date"] for r in history)
     latest_rows = [r for r in history if r["date"] == latest_date]
+    latest_rows.sort(key=lambda r: r["changePct"] if r["changePct"] is not None else 999999)
 
     # ---- meta.json ----
     all_dates = sorted(set(r["date"] for r in history))

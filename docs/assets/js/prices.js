@@ -54,7 +54,7 @@
       : `符合條件共 ${rows.length} 筆`;
 
     if (shown.length === 0) {
-      el.tbody.innerHTML = `<tr><td colspan="9" class="empty-state">沒有符合條件的資料</td></tr>`;
+      el.tbody.innerHTML = `<tr><td colspan="10" class="empty-state">沒有符合條件的資料</td></tr>`;
       return;
     }
     el.tbody.innerHTML = shown.map(r => `
@@ -63,10 +63,11 @@
         <td>${r.market}</td>
         <td>${r.speciesName}</td>
         <td>${r.speciesCode}</td>
+        <td>${money(r.avgPrice)}</td>
+        <td>${priceChangeBadge(r)}</td>
         <td>${money(r.priceHigh)}</td>
         <td>${money(r.priceMid)}</td>
         <td>${money(r.priceLow)}</td>
-        <td>${money(r.avgPrice)}</td>
         <td>${money(r.volume)}</td>
       </tr>
     `).join("");
@@ -139,6 +140,6 @@
     runQuery();
   } catch (err) {
     console.error(err);
-    el.tbody.innerHTML = `<tr><td colspan="9" class="empty-state">資料載入失敗：${err.message}</td></tr>`;
+    el.tbody.innerHTML = `<tr><td colspan="10" class="empty-state">資料載入失敗：${err.message}</td></tr>`;
   }
 })();
