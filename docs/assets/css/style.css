@@ -2,7 +2,7 @@
   --ocean-deep: #0b3d5c;
   --ocean: #106b8f;
   --ocean-light: #4fa5c9;
-  --sand: #f6ecd9;
+  --sand: #ffffff;
   --sand-dark: #e7d7b3;
   --coral: #e2725b;
   --ink: #1c2b33;
@@ -23,13 +23,14 @@ body {
   line-height: 1.6;
 }
 
-/* 頁面最上方／最下方的浮水印圖片橫幅（海鮮圖在上、漁工好朋友圖在下），見docs/assets/img/*_watermark_strip.png */
+/* 頁面最上方／最下方的浮水印圖片橫幅（海鮮圖在上、漁工好朋友圖在下），見docs/assets/img/*_watermark_strip.png
+   單張圖不重複平鋪，直接平均拉寬填滿整個寬度 */
 .watermark-strip {
   width: 100%;
-  height: 84px;
-  background-repeat: repeat-x;
-  background-position: left center;
-  background-size: auto 84px;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
   opacity: 0.55;
   pointer-events: none;
 }
@@ -37,7 +38,7 @@ body {
 .watermark-strip.bottom { background-image: url("../img/bottom_watermark_strip.png"); }
 
 @media (max-width: 640px) {
-  .watermark-strip { height: 54px; background-size: auto 54px; }
+  .watermark-strip { height: 64px; }
 }
 
 a { color: var(--ocean); text-decoration: none; }
