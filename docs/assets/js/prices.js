@@ -6,6 +6,7 @@
   const el = {
     species: document.getElementById("f-species"),
     market: document.getElementById("f-market"),
+    marketType: document.getElementById("f-market-type"),
     start: document.getElementById("f-start"),
     end: document.getElementById("f-end"),
     searchBtn: document.getElementById("btn-search"),
@@ -30,6 +31,7 @@
     return {
       speciesCode: el.species.value ? Number(el.species.value) : null,
       market: el.market.value || null,
+      marketType: el.marketType.value || null,
       start: el.start.value || null,
       end: el.end.value || null,
     };
@@ -40,6 +42,7 @@
     return history.filter(r => {
       if (f.speciesCode !== null && r.speciesCode !== f.speciesCode) return false;
       if (f.market && r.market !== f.market) return false;
+      if (f.marketType && r.marketType !== f.marketType) return false;
       if (f.start && r.date < f.start) return false;
       if (f.end && r.date > f.end) return false;
       return true;
@@ -60,8 +63,8 @@
     el.tbody.innerHTML = shown.map(r => `
       <tr>
         <td>${formatDateTW(r.date)}</td>
-        <td>${r.market}</td>
-        <td>${r.speciesName}</td>
+        <td>${r.market}${marketTypeBadge(r)}</td>
+        <td>${r.speciesName}${farmedSustainBadges(r)}</td>
         <td>${r.speciesCode}</td>
         <td>${money(r.avgPrice)}</td>
         <td>${priceChangeBadge(r)}</td>

@@ -31,6 +31,64 @@ RAW_DIR = ROOT / "data" / "raw"
 DATA_DIR = ROOT / "data"
 DOCS_DATA_DIR = ROOT / "docs" / "data"
 
+# ---- 消費地市場 vs 產地市場 ----
+# 依據漁業署 efish.fa.gov.tw「漁產品批發市場交易行情站」公開列出的13個消費地魚市場名單，
+# 其餘（漁港、批發市場）視為產地市場。見 data_notes.md 說明。
+CONSUMER_MARKETS = {
+    "台北", "三重", "新竹", "桃園", "苗栗", "台中", "彰化",
+    "埔心", "嘉義", "斗南", "佳里", "新營", "高雄",
+}
+
+
+def market_type(market_name: str) -> str:
+    return "消費地" if market_name in CONSUMER_MARKETS else "產地"
+
+
+def load_seafood_guide():
+    path = DATA_DIR / "seafood_guide_reference.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+# 沒有養/海字尾標記、也不在1xxx代碼區間，但依《臺灣海鮮選擇指南》或養殖漁業常識
+# 可確定主要是養殖供應的品項（例如白蝦在4xxx蝦類區間裡沒有字尾標記，但guide明確寫「養殖白蝦」）。
+FARMED_NAME_OVERRIDES = {"白蝦", "鮑魚"}
+
+
+def classify_farmed(code: int, name: str):
+    """判斷是否為養殖：優先看名稱裡的養/海「字尾標記」（資料源本身的命名慣例，
+    例如「文蛤(海)」vs「文蛤養」），注意「養」「海」必須是字尾標記才算數，
+    避免誤判像「海鱺」「海鰻」這種「海」只是名稱一部分、不是野生標記的魚種。
+    其次看代碼區間（1000-1999整段是養殖魚類分類，見 species.json 最後一碼1999「其他養殖」）。
+    傳回 True/False/None（None代表無足夠依據判斷，例如加工品6xxx）。"""
+    stripped = name.rstrip(")）")
+    if stripped.endswith("養"):
+        return True
+    if stripped.endswith("海"):
+        return False
+    if stripped in FARMED_NAME_OVERRIDES:
+        return True
+    if 1000 <= code <= 1999:
+        return True
+    if 2000 <= code <= 3999:
+        return False
+    if 6000 <= code <= 6999 or code == 9999:
+        return None
+    return None
+
+
+def classify_sustainability(name: str, guide: dict):
+    """粗略關鍵字比對「台灣海鮮選擇指南」，傳回 green/yellow/red/None。
+    比對優先序 red > yellow > green，避免因為別名重疊而高估安全等級（見指南備註）。"""
+    if not guide:
+        return None
+    for level in ("red", "yellow", "green"):
+        for keyword in guide.get(level, []):
+            if keyword and keyword in name:
+                return level
+    return None
+
 
 def roc_to_iso(roc: str) -> str:
     y, m, d = int(roc[:3]) + 1911, int(roc[3:5]), int(roc[5:7])
@@ -104,6 +162,21 @@ def main():
 
     history = sorted(merged.values(), key=lambda x: (x["date"], x["speciesCode"], x["market"]))
 
+    # ---- 消費地/產地市場分類 + 養殖/永續分類（依species.json,粗略關鍵字比對，見data_notes.md）----
+    guide = load_seafood_guide()
+    farmed_cache = {}
+    sustain_cache = {}
+    for r in history:
+        r["marketType"] = market_type(r["market"])
+        code = r["speciesCode"]
+        name = r["speciesName"]
+        if code not in farmed_cache:
+            farmed_cache[code] = classify_farmed(code, name)
+        if code not in sustain_cache:
+            sustain_cache[code] = classify_sustainability(name, guide)
+        r["farmed"] = farmed_cache[code]
+        r["sustainability"] = sustain_cache[code]
+
     # ---- 漲跌幅：跟「同一魚種代碼＋同一市場」前一個有交易紀錄的日期比較 ----
     # （不是單純昨天，因為休市/個別市場不是每天都有申報，見 data_notes.md）
     by_group = {}
@@ -131,7 +204,15 @@ def main():
 
     # ---- species.json ----
     species_map = {r["speciesCode"]: r["speciesName"] for r in history}
-    species = [{"code": c, "name": n} for c, n in sorted(species_map.items())]
+    species = [
+        {
+            "code": c,
+            "name": n,
+            "farmed": farmed_cache.get(c),
+            "sustainability": sustain_cache.get(c),
+        }
+        for c, n in sorted(species_map.items())
+    ]
 
     # ---- markets.json ----
     market_stats = {}
@@ -161,6 +242,10 @@ def main():
         "note": "資料來源：農業部漁業署漁產品交易行情OpenData。該網站對自動化請求有防護機制，"
                 "本專案以GitHub Actions排程抓取，若排程連續失敗會保留舊資料，"
                 "請留意 generatedAt 與 latestDate 是否持續更新。",
+        "marketTypeNote": "市場分為「消費地」（依efish.fa.gov.tw公開的13個消費地魚市場名單）與「產地」（其餘漁港/批發市場）。",
+        "farmedSustainabilityNote": "養殖(farmed)欄位優先依資料本身命名的養/海標記判斷，其次依代碼區間（1000-1999為養殖魚類分類）；"
+                "永續(sustainability)欄位為與《臺灣海鮮選擇指南 2023.10》粗略關鍵字比對結果（green建議食用/yellow斟酌食用/red避免食用），"
+                "非逐魚種官方認證，僅供參考，詳見 data/seafood_guide_reference.json。",
     }
 
     (docs_dir / "history.json").write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -169,7 +254,7 @@ def main():
     (docs_dir / "latest.json").write_text(json.dumps({"date": latest_date, "records": latest_rows}, ensure_ascii=False, indent=2), encoding="utf-8")
     (docs_dir / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    for fname in ("fish_calendar.json", "taiwan_regional_species_reference.json"):
+    for fname in ("fish_calendar.json", "taiwan_regional_species_reference.json", "seafood_guide_reference.json"):
         src = DATA_DIR / fname
         if src.exists():
             shutil.copy(src, docs_dir / fname)

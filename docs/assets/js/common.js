@@ -57,3 +57,24 @@ function priceChangeBadge(r, opts) {
   const prevInfo = opts.showPrevDate === false ? "" : `<span class="prev-date">較${formatDateTW(r.prevDate)}</span>`;
   return `<span class="price-change ${r.direction}">${arrow} ${sign}${r.changePct}%${prevInfo}</span>`;
 }
+
+// 市場類型（消費地/產地）小標籤
+function marketTypeBadge(r) {
+  if (!r.marketType) return "";
+  const cls = r.marketType === "消費地" ? "market-type-badge consumer" : "market-type-badge origin";
+  return `<span class="${cls}">${r.marketType}</span>`;
+}
+
+// 養殖／永續標籤：依使用者需求，只在「消費地市場」的資料才加註（見data_notes.md養殖/永續分類說明）。
+// 養殖=資料本身養/海命名慣例＋代碼區間判斷；永續=與《臺灣海鮮選擇指南》綠燈(green)比對相符才顯示「永續」。
+function farmedSustainBadges(r) {
+  if (r.marketType !== "消費地") return "";
+  let html = "";
+  if (r.farmed === true) {
+    html += `<span class="tag-badge farmed">養殖</span>`;
+  }
+  if (r.sustainability === "green") {
+    html += `<span class="tag-badge sustain">永續</span>`;
+  }
+  return html;
+}

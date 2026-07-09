@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+<div class="watermark-strip top"></div>
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="index.html">🐟 台灣海鮮儀表板</a>
@@ -33,6 +34,14 @@
         <select id="f-market"><option value="">全部市場</option></select>
       </div>
       <div class="filter-group">
+        <label for="f-market-type">市場類型</label>
+        <select id="f-market-type">
+          <option value="">全部（消費地＋產地）</option>
+          <option value="消費地">消費地市場</option>
+          <option value="產地">產地市場</option>
+        </select>
+      </div>
+      <div class="filter-group">
         <label for="f-start">開始日期</label>
         <input type="date" id="f-start">
       </div>
@@ -47,7 +56,7 @@
         <button id="btn-reset" class="secondary">重設</button>
       </div>
     </div>
-    <p style="font-size:0.85rem;color:var(--muted);">同時選定「單一魚種＋單一市場」時，下方會顯示價格趨勢圖。品種代碼與名稱是一對一的（同名不同代碼會列成不同選項），詳見資料筆記。</p>
+    <p style="font-size:0.85rem;color:var(--muted);">同時選定「單一魚種＋單一市場」時，下方會顯示價格趨勢圖。品種代碼與名稱是一對一的（同名不同代碼會列成不同選項），詳見資料筆記。市場名稱旁的藍色「消費地」／橘色「產地」標籤代表市場類型；消費地市場的魚貨名稱旁如標示「養殖」「永續」，為與資料本身命名慣例及《臺灣海鮮選擇指南》粗略比對結果，僅供參考。</p>
   </div>
 
   <div class="card" id="chart-card" style="display:none;">
@@ -73,6 +82,7 @@
 <footer class="site-footer">
   資料來源：農業部漁業署漁產品交易行情OpenData。0元的上/中/下價可能代表當日該價格區間無成交，非真實零元。
 </footer>
+<div class="watermark-strip bottom"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script src="assets/js/common.js"></script>

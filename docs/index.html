@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+<div class="watermark-strip top"></div>
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="index.html">🐟 台灣海鮮儀表板</a>
@@ -57,6 +58,7 @@
   資料來源：<a href="https://data.moa.gov.tw/open_detail.aspx?id=039" target="_blank" rel="noopener">農業部漁業署漁產品交易行情OpenData</a>、
   農業部漁業署《年年有魚》漁業月曆。本站資料由 GitHub Actions 排程自動更新，實際更新時間請見上方頁面提示。
 </footer>
+<div class="watermark-strip bottom"></div>
 
 <script src="assets/js/common.js"></script>
 <script>
@@ -83,15 +85,15 @@
 
     // 跌價優先出清榜（latest.json 已依跌幅排序，跌最多排最前）
     const latest = await DataAPI.getLatest();
-    document.getElementById("latest-caption").textContent = `${formatDateTW(latest.date)} 全市場交易快照，依「與上一個有交易紀錄日期」相比的跌幅排序，跌最多、最需要出清的排最前面（共 ${latest.records.length} 筆，僅顯示前 15 筆）`;
+    document.getElementById("latest-caption").textContent = `${formatDateTW(latest.date)} 全市場交易快照（含消費地與產地市場），依「與上一個有交易紀錄日期」相比的跌幅排序，跌最多、最需要出清的排最前面（共 ${latest.records.length} 筆，僅顯示前 15 筆）`;
     const tbody = document.getElementById("latest-tbody");
     if (latest.records.length === 0) {
       tbody.innerHTML = `<tr><td colspan="8" class="empty-state">尚無資料</td></tr>`;
     } else {
       tbody.innerHTML = latest.records.slice(0, 15).map((r, i) => `
         <tr>
-          <td>${r.market}</td>
-          <td>${i < 3 && r.direction === "down" ? '<span class="urgent-badge">急售</span>' : ""}${r.speciesName}</td>
+          <td>${r.market}${marketTypeBadge(r)}</td>
+          <td>${i < 3 && r.direction === "down" ? '<span class="urgent-badge">急售</span>' : ""}${r.speciesName}${farmedSustainBadges(r)}</td>
           <td>${money(r.avgPrice)}</td>
           <td>${priceChangeBadge(r)}</td>
           <td>${money(r.priceHigh)}</td>
