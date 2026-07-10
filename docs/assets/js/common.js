@@ -78,3 +78,120 @@ function farmedSustainBadges(r) {
   }
   return html;
 }
+
+// ================= 即時抓取政府API（瀏覽器端直接fetch，仿照 hsuchihting 的作法） =================
+// 原理：GitHub Actions排程用的是資料中心IP，會被data.moa.gov.tw的防護機制擋下；
+// 但如果改成「訪客自己打開網頁時，瀏覽器直接呼叫API」，用的是訪客自己家用網路的IP，就不會被擋。
+// 這裡只用來抓「最新一天的即時快照」，長期歷史資料（趨勢圖等）還是用docs/data/history.json靜態檔案。
+const AQUATIC_API_BASE = "https://data.moa.gov.tw/Service/OpenData/FromM/AquaticTransData.aspx";
+
+const CONSUMER_MARKETS = new Set([
+  "台北", "三重", "新竹", "桃園", "苗栗", "台中", "彰化",
+  "埔心", "嘉義", "斗南", "佳里", "新營", "高雄",
+]);
+
+function marketTypeOfJs(market) {
+  return CONSUMER_MARKETS.has(market) ? "消費地" : "產地";
+}
+
+function isoToRocCompact(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${y - 1911}${String(m).padStart(2, "0")}${String(d).padStart(2, "0")}`;
+}
+
+function rocCompactToIso(roc) {
+  const s = String(roc);
+  const y = parseInt(s.slice(0, 3), 10) + 1911;
+  return `${y}-${s.slice(3, 5)}-${s.slice(5, 7)}`;
+}
+
+function addDaysIso(iso, delta) {
+  const d = new Date(iso + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + delta);
+  return d.toISOString().slice(0, 10);
+}
+
+// 用台灣時區(UTC+8)算「今天」，避免海外訪客瀏覽器時區不同而抓錯日期區間
+function todayIsoTaiwan() {
+  const now = new Date();
+  const twMs = now.getTime() + 8 * 60 * 60 * 1000 + now.getTimezoneOffset() * 60000;
+  return new Date(twMs).toISOString().slice(0, 10);
+}
+
+async function fetchLiveAquaticRows(days) {
+  days = days || 10;
+  const end = todayIsoTaiwan();
+  const start = addDaysIso(end, -days);
+  const url = `${AQUATIC_API_BASE}?$top=10000&$skip=0&StartDate=${isoToRocCompact(start)}&EndDate=${isoToRocCompact(end)}`;
+  const res = await fetch(url, { cache: "no-cache" });
+  if (!res.ok) throw new Error(`即時API回應失敗（HTTP ${res.status}）`);
+  const payload = await res.json();
+  const rows = Array.isArray(payload) ? payload : (payload.data || []);
+  if (rows.length && rows[0] && rows[0].errMsg) throw new Error(rows[0].errMsg);
+  return rows.map((r) => ({
+    date: rocCompactToIso(r["交易日期"]),
+    dateRoc: r["交易日期"],
+    speciesCode: r["品種代碼"],
+    speciesName: r["魚貨名稱"],
+    market: r["市場名稱"],
+    priceHigh: r["上價"],
+    priceMid: r["中價"],
+    priceLow: r["下價"],
+    volume: r["交易量"],
+    avgPrice: r["平均價"],
+  }));
+}
+
+// 把即時抓到的資料併入既有的靜態history（即時資料優先覆蓋同一天的靜態資料），
+// 重新計算漲跌幅／市場類型／養殖永續標籤，回傳跟 docs/data/latest.json 相同格式的 {date, records}
+function buildLiveLatest(staticHistory, liveRows, speciesList) {
+  const speciesMeta = new Map((speciesList || []).map((s) => [s.code, s]));
+  const keyOf = (r) => `${r.date}|${r.speciesCode}|${r.market}`;
+
+  const merged = new Map();
+  for (const r of staticHistory) merged.set(keyOf(r), { ...r });
+  for (const r of liveRows) merged.set(keyOf(r), { ...r });
+
+  const all = Array.from(merged.values());
+  const groups = new Map();
+  for (const r of all) {
+    const gk = `${r.speciesCode}|${r.market}`;
+    if (!groups.has(gk)) groups.set(gk, []);
+    groups.get(gk).push(r);
+  }
+
+  for (const rows of groups.values()) {
+    rows.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+    let prev = null;
+    for (const r of rows) {
+      r.marketType = marketTypeOfJs(r.market);
+      const meta = speciesMeta.get(r.speciesCode);
+      r.farmed = meta ? meta.farmed : null;
+      r.sustainability = meta ? meta.sustainability : null;
+      if (prev && prev.avgPrice) {
+        const changeAbs = Math.round((r.avgPrice - prev.avgPrice) * 100) / 100;
+        const changePct = Math.round((changeAbs / prev.avgPrice) * 10000) / 100;
+        r.prevDate = prev.date;
+        r.prevAvgPrice = prev.avgPrice;
+        r.changeAbs = changeAbs;
+        r.changePct = changePct;
+        r.direction = changeAbs > 0 ? "up" : changeAbs < 0 ? "down" : "flat";
+      } else {
+        r.prevDate = null;
+        r.prevAvgPrice = null;
+        r.changeAbs = null;
+        r.changePct = null;
+        r.direction = "new";
+      }
+      prev = r;
+    }
+  }
+
+  let latestDate = null;
+  for (const r of all) {
+    if (!latestDate || r.date > latestDate) latestDate = r.date;
+  }
+  const latestRows = all.filter((r) => r.date === latestDate);
+  latestRows.sort((a, b) => (a.changePct ?? 999999) - (b.changePct ?? 999999));
+  return { date: latestDate, records: latestRows };
+}

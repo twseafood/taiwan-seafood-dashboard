@@ -23,19 +23,18 @@ body {
   line-height: 1.6;
 }
 
-/* 頁面最上方／最下方的浮水印圖片橫幅（海鮮圖在上、漁工好朋友圖在下），見docs/assets/img/*_watermark_strip.png
-   單張圖不重複平鋪，直接平均拉寬填滿整個寬度 */
+/* 頁面最上方的浮水印圖片橫幅（4張圖並排靠右），見docs/assets/img/top_watermark_strip.png
+   不拉寬、不重複，維持原比例、靠右對齊 */
 .watermark-strip {
   width: 100%;
   height: 100px;
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-  opacity: 0.55;
+  background-position: right center;
+  background-size: auto 100%;
+  opacity: 0.6;
   pointer-events: none;
 }
 .watermark-strip.top { background-image: url("../img/top_watermark_strip.png"); }
-.watermark-strip.bottom { background-image: url("../img/bottom_watermark_strip.png"); }
 
 @media (max-width: 640px) {
   .watermark-strip { height: 64px; }
@@ -291,6 +290,18 @@ button.secondary { background: var(--sand-dark); color: var(--ink); }
   padding: 0.1rem 0.4rem;
   margin-right: 0.4rem;
 }
+
+/* 即時資料狀態標籤（今日價格榜標題旁） */
+#live-status {
+  font-size: 0.72rem;
+  font-weight: 700;
+  vertical-align: middle;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  margin-left: 0.4rem;
+}
+#live-status.live { background: #e6f4ea; color: #1e8449; }
+#live-status.fallback { background: #fff3d6; color: #8a5a00; }
 
 /* 消費地／產地市場標籤 */
 .market-type-badge {
