@@ -2,12 +2,18 @@ name: 更新漁產品交易行情資料
 
 on:
   schedule:
-    # 每天台北時間 07:10 執行（UTC 23:10 為前一天）
+    # 每天台北時間 07:10 執行（UTC 23:10 為前一天）；GitHub Actions機房IP常被data.moa.gov.tw
+    # 擋下，這個排程多半只是備援，主要靠下面的 push 觸發（見cloudflare-worker/README.md）
     - cron: "10 23 * * *"
+  push:
+    # Cloudflare Worker把抓到的原始資料寫進 data/raw/ 後會觸發這裡，馬上整理成docs/data並發佈，
+    # 不用等到隔天排程時間，資料延遲從「最多一天」縮短到「幾分鐘」
+    paths:
+      - "data/raw/**"
   workflow_dispatch:
     inputs:
       days:
-        description: "要抓最近幾天的資料（含今天）"
+        description: "要抓最近幾天的資料（含今天，GitHub Actions自行嘗試抓取用；通常會被擋下失敗，屬預期行為）"
         default: "5"
         required: false
 
@@ -26,7 +32,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: 抓取最近資料
+      - name: 嘗試自行抓取最近資料（機房IP常被擋，失敗屬預期行為，不影響後續步驟）
         id: fetch
         continue-on-error: true
         run: |
@@ -36,19 +42,19 @@ jobs:
             --top 5000 \
             -o /tmp/incoming/latest.json
 
-      - name: 若抓取失敗則記錄並停止（保留舊資料，不覆蓋網站）
-        if: steps.fetch.outcome == 'failure'
-        run: |
-          echo "::warning::抓取失敗（很可能是 data.moa.gov.tw 擋掉了 GitHub Actions 的自動化請求）。本次不更新資料，維持現有 docs/data 內容。"
-          exit 0
-
       - name: 整理資料到 docs/data
-        if: steps.fetch.outcome == 'success'
+        # 不論上面自行抓取是否成功都要跑：即使這次自己抓不到，data/raw/ 目錄裡
+        # 也可能已經有 Cloudflare Worker 剛寫進來的新資料（見 cloudflare-worker/README.md），
+        # 這一步純粹是本機檔案運算，不需要連到data.moa.gov.tw，不會被擋。
         run: |
-          python scripts/process_data.py --extra /tmp/incoming/latest.json
+          if [ "${{ steps.fetch.outcome }}" = "success" ]; then
+            python scripts/process_data.py --extra /tmp/incoming/latest.json
+          else
+            echo "::warning::GitHub Actions自行抓取失敗（預期中，機房IP常被data.moa.gov.tw擋下）。改用 data/raw/ 目錄現有的資料處理。"
+            python scripts/process_data.py
+          fi
 
       - name: 檢查是否有變更
-        if: steps.fetch.outcome == 'success'
         id: git-check
         run: |
           git add docs/data
@@ -59,7 +65,7 @@ jobs:
           fi
 
       - name: Commit 並 push
-        if: steps.fetch.outcome == 'success' && steps.git-check.outputs.changed == 'true'
+        if: steps.git-check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

@@ -1,0 +1,16 @@
+name = "taiwan-seafood-fetch-worker"
+main = "index.js"
+compatibility_date = "2024-09-01"
+
+# 每天 UTC 23:30 = 台北時間 07:30 執行一次
+[triggers]
+crons = ["30 23 * * *"]
+
+# 一般變數（非機密），可以直接寫在這裡；GITHUB_TOKEN / TRIGGER_KEY 是機密，
+# 請用 `wrangler secret put GITHUB_TOKEN` / `wrangler secret put TRIGGER_KEY`
+# 或 Cloudflare Dashboard 的 Secret 欄位設定，不要寫在這個檔案裡。
+[vars]
+GITHUB_OWNER = "twseafood"
+GITHUB_REPO = "taiwan-seafood-dashboard"
+GITHUB_BRANCH = "master"
+FETCH_DAYS = "10"
