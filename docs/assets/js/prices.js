@@ -132,7 +132,7 @@
     ]);
     history = hist;
 
-    el.rangeCaption.textContent = `資料涵蓋 ${meta.dateRange.start} ~ ${meta.dateRange.end}（共 ${meta.recordCount.toLocaleString()} 筆，最後更新於 ${formatDateTime(meta.generatedAt)}，為每日排程備份的靜態資料）。若要看今天最即時的價格，請至首頁「今日價格榜」查看瀏覽器即時抓取的資料。`;
+    el.rangeCaption.textContent = `資料涵蓋 ${meta.dateRange.start} ~ ${meta.dateRange.end}（共 ${meta.recordCount.toLocaleString()} 筆，最後更新於 ${formatDateTime(meta.generatedAt)}，為每日排程備份的靜態資料）。若要看最即時的價格，請至首頁「價格榜」查看瀏覽器即時抓取的資料。`;
 
     populateSelect(el.species, species, "code", (s) => `${s.name}（代碼${s.code}）`);
     populateSelect(el.market, markets, "name", (m) => `${m.name}（${m.count}筆）`);

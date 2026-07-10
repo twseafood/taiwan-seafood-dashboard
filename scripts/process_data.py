@@ -44,6 +44,17 @@ def market_type(market_name: str) -> str:
     return "消費地" if market_name in CONSUMER_MARKETS else "產地"
 
 
+# ---- 漲跌幅可信度警示 ----
+# 「平均價」是政府資料本身算好的當日均價，會受到貨規格/等級組成影響（例如同一魚種
+# 某天進的是大尾高價貨、某天進的是小尾雜貨，平均價可以差好幾倍，但不是「行情崩盤」）。
+# 這裡不試圖去猜測/修正原始資料，只加兩個保守的警示欄位，讓前端能提示使用者、
+# 並避免把這種資料雜訊誤標成「急售」：
+#   volatileNote：漲跌幅超過門檻，可能是規格組成差異造成，非同批貨真實漲跌
+#   lowVolume：當日交易量過低，數字容易失真，不適合當成「急售」訊號
+EXTREME_CHANGE_PCT = 40.0
+MIN_VOLUME_KG = 10.0
+
+
 def load_seafood_guide():
     path = DATA_DIR / "seafood_guide_reference.json"
     if not path.exists():
@@ -186,6 +197,7 @@ def main():
         group_rows.sort(key=lambda x: x["date"])
         prev = None
         for r in group_rows:
+            r["lowVolume"] = (r.get("volume") or 0) < MIN_VOLUME_KG
             if prev is not None and prev["avgPrice"]:
                 change_abs = round(r["avgPrice"] - prev["avgPrice"], 2)
                 change_pct = round(change_abs / prev["avgPrice"] * 100, 2)
@@ -194,12 +206,14 @@ def main():
                 r["changeAbs"] = change_abs
                 r["changePct"] = change_pct
                 r["direction"] = "up" if change_abs > 0 else ("down" if change_abs < 0 else "flat")
+                r["volatileNote"] = abs(change_pct) >= EXTREME_CHANGE_PCT
             else:
                 r["prevDate"] = None
                 r["prevAvgPrice"] = None
                 r["changeAbs"] = None
                 r["changePct"] = None
                 r["direction"] = "new"
+                r["volatileNote"] = False
             prev = r
 
     # ---- species.json ----
@@ -227,6 +241,21 @@ def main():
     latest_date = max(r["date"] for r in history)
     latest_rows = [r for r in history if r["date"] == latest_date]
     latest_rows.sort(key=lambda r: r["changePct"] if r["changePct"] is not None else 999999)
+
+    # 「急售」標記只給前3筆「排除規格價差過大／交易量過低」的可信下跌紀錄，
+    # 避免把資料雜訊誤標成真的急售出清（見 EXTREME_CHANGE_PCT / MIN_VOLUME_KG 說明）
+    urgent_count = 0
+    for r in latest_rows:
+        is_eligible = (
+            r["direction"] == "down"
+            and not r.get("volatileNote")
+            and not r.get("lowVolume")
+        )
+        if is_eligible and urgent_count < 3:
+            r["isUrgent"] = True
+            urgent_count += 1
+        else:
+            r["isUrgent"] = False
 
     # ---- meta.json ----
     all_dates = sorted(set(r["date"] for r in history))

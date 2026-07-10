@@ -47,6 +47,8 @@ function primaryName(nameStr) {
 }
 
 // 台股慣例：紅漲、綠跌。回傳可直接塞進表格儲存格的 HTML。
+// volatileNote：漲跌幅超過門檻(見EXTREME_CHANGE_PCT)，可能是當日到貨規格/等級組成不同造成，
+// 不代表同一批貨的真實漲跌，顯示「規格價差大」提醒使用者謹慎解讀。
 function priceChangeBadge(r, opts) {
   opts = opts || {};
   if (r.direction === "new" || r.changePct === null || r.changePct === undefined) {
@@ -54,8 +56,11 @@ function priceChangeBadge(r, opts) {
   }
   const arrow = r.direction === "up" ? "▲" : (r.direction === "down" ? "▼" : "—");
   const sign = r.changePct > 0 ? "+" : "";
+  const noteHtml = r.volatileNote
+    ? `<span class="mix-note" title="漲跌幅過大，可能是當日到貨規格/等級組成不同造成，非同批貨的真實漲跌，建議同時參考上/中/下價">規格價差大</span>`
+    : "";
   const prevInfo = opts.showPrevDate === false ? "" : `<span class="prev-date">較${formatDateTW(r.prevDate)}</span>`;
-  return `<span class="price-change ${r.direction}">${arrow} ${sign}${r.changePct}%${prevInfo}</span>`;
+  return `<span class="price-change ${r.direction}">${arrow} ${sign}${r.changePct}%${noteHtml}${prevInfo}</span>`;
 }
 
 // 市場類型（消費地/產地）小標籤
@@ -142,6 +147,10 @@ async function fetchLiveAquaticRows(days) {
   }));
 }
 
+// 漲跌幅可信度警示門檻，需跟 scripts/process_data.py 的 EXTREME_CHANGE_PCT / MIN_VOLUME_KG 保持一致
+const EXTREME_CHANGE_PCT = 40.0;
+const MIN_VOLUME_KG = 10.0;
+
 // 把即時抓到的資料併入既有的靜態history（即時資料優先覆蓋同一天的靜態資料），
 // 重新計算漲跌幅／市場類型／養殖永續標籤，回傳跟 docs/data/latest.json 相同格式的 {date, records}
 function buildLiveLatest(staticHistory, liveRows, speciesList) {
@@ -168,6 +177,7 @@ function buildLiveLatest(staticHistory, liveRows, speciesList) {
       const meta = speciesMeta.get(r.speciesCode);
       r.farmed = meta ? meta.farmed : null;
       r.sustainability = meta ? meta.sustainability : null;
+      r.lowVolume = (r.volume || 0) < MIN_VOLUME_KG;
       if (prev && prev.avgPrice) {
         const changeAbs = Math.round((r.avgPrice - prev.avgPrice) * 100) / 100;
         const changePct = Math.round((changeAbs / prev.avgPrice) * 10000) / 100;
@@ -176,12 +186,14 @@ function buildLiveLatest(staticHistory, liveRows, speciesList) {
         r.changeAbs = changeAbs;
         r.changePct = changePct;
         r.direction = changeAbs > 0 ? "up" : changeAbs < 0 ? "down" : "flat";
+        r.volatileNote = Math.abs(changePct) >= EXTREME_CHANGE_PCT;
       } else {
         r.prevDate = null;
         r.prevAvgPrice = null;
         r.changeAbs = null;
         r.changePct = null;
         r.direction = "new";
+        r.volatileNote = false;
       }
       prev = r;
     }
@@ -193,5 +205,18 @@ function buildLiveLatest(staticHistory, liveRows, speciesList) {
   }
   const latestRows = all.filter((r) => r.date === latestDate);
   latestRows.sort((a, b) => (a.changePct ?? 999999) - (b.changePct ?? 999999));
+
+  // 「急售」只給前3筆排除規格價差過大／交易量過低的可信下跌紀錄，跟 process_data.py 邏輯一致
+  let urgentCount = 0;
+  for (const r of latestRows) {
+    const eligible = r.direction === "down" && !r.volatileNote && !r.lowVolume;
+    if (eligible && urgentCount < 3) {
+      r.isUrgent = true;
+      urgentCount += 1;
+    } else {
+      r.isUrgent = false;
+    }
+  }
+
   return { date: latestDate, records: latestRows };
 }

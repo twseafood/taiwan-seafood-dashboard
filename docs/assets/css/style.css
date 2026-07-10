@@ -280,6 +280,22 @@ button.secondary { background: var(--sand-dark); color: var(--ink); }
 .price-change.down { color: #1e8449; }
 .price-change.flat, .price-change.new { color: var(--muted); font-weight: 500; }
 .price-change .prev-date { font-weight: 400; color: var(--muted); font-size: 0.78rem; margin-left: 0.25rem; }
+
+/* 漲跌幅可信度警示：漲跌幅過大，可能是規格/等級組成不同造成，非同批貨真實漲跌（見data_notes.md） */
+.mix-note {
+  display: inline-block;
+  background: #fdf1e8;
+  color: var(--coral);
+  border: 1px solid var(--coral);
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 0.05rem 0.35rem;
+  margin-left: 0.35rem;
+  cursor: help;
+  white-space: normal;
+}
+
 .urgent-badge {
   display: inline-block;
   background: #1e8449;
@@ -291,7 +307,7 @@ button.secondary { background: var(--sand-dark); color: var(--ink); }
   margin-right: 0.4rem;
 }
 
-/* 即時資料狀態標籤（今日價格榜標題旁） */
+/* 即時資料狀態標籤（價格榜標題旁） */
 #live-status {
   font-size: 0.72rem;
   font-weight: 700;

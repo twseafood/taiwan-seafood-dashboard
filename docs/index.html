@@ -38,8 +38,13 @@
   </div>
 
   <div class="card">
-    <h2>今日價格榜 <span id="live-status"></span></h2>
-    <p class="page-subtitle" id="latest-caption" style="margin-bottom:0.6rem;"></p>
+    <h2>價格榜 <span id="board-date"></span> <span id="live-status"></span></h2>
+    <p class="page-subtitle" id="latest-caption" style="margin-bottom:0.4rem;"></p>
+    <p class="notice" id="price-caveat" style="margin-bottom:0.9rem;font-size:0.82rem;">
+      「平均價」是政府資料當日算好的均價，會受到貨規格／等級組成影響（例如同一魚種某天進大尾高價貨、某天進小尾雜貨），
+      同一魚種前後兩個交易日的平均價不必然代表同等級行情的真實漲跌，僅供參考，建議同時對照上／中／下價。
+      標示「規格價差大」代表漲跌幅超過 40%，交易量低於 10kg 的紀錄也容易失真；這兩類紀錄不會被標記「急售」。
+    </p>
     <div class="table-wrap">
       <table>
         <thead>
@@ -56,7 +61,7 @@
 
 <footer class="site-footer">
   資料來源：<a href="https://data.moa.gov.tw/open_detail.aspx?id=039" target="_blank" rel="noopener">農業部漁業署漁產品交易行情OpenData</a>、
-  農業部漁業署《年年有魚》漁業月曆。「今日價格榜」由你的瀏覽器即時連線政府API取得（失敗時退回靜態資料）；其餘統計與「魚價查詢」頁使用每日排程自動備份的靜態資料，實際更新時間請見上方頁面提示。
+  農業部漁業署《年年有魚》漁業月曆。上方「價格榜」由你的瀏覽器即時連線政府API取得（失敗時退回靜態資料）；其餘統計與「魚價查詢」頁使用每日排程自動備份的靜態資料，實際更新時間請見上方頁面提示。
 </footer>
 
 <script src="assets/js/common.js"></script>
@@ -65,7 +70,7 @@
   try {
     const meta = await DataAPI.getMeta();
 
-    // 今日價格榜：先嘗試瀏覽器直接呼叫政府API抓即時資料（原理同 hsuchihting 的網站，
+    // 價格榜：先嘗試瀏覽器直接呼叫政府API抓即時資料（原理同 hsuchihting 的網站，
     // 用訪客自己的網路IP去要資料，不會被GitHub Actions會遇到的防護機制擋下），失敗才退回靜態latest.json
     // 這段刻意放在最前面，因為下面的統計卡片／黃色提示區也要用即時抓到的最新日期，避免跟即時榜單日期矛盾。
     const liveStatusEl = document.getElementById("live-status");
@@ -106,22 +111,23 @@
     const ageDays = (Date.now() - generated.getTime()) / (1000 * 60 * 60 * 24);
     notice.style.display = "block";
     if (liveIsNewer) {
-      notice.textContent = `✓ 已透過你瀏覽器即時連線農業部API，取得最新交易日期 ${formatDateTW(latest.date)} 的資料（下方「今日價格榜」即為此即時資料）。上方統計筆數／魚種數／市場數仍是每日排程備份的靜態統計（最後備份於 ${formatDateTime(meta.generatedAt)}，涵蓋至 ${meta.dateRange.end}），這兩者本來就會有落差，屬正常現象，不代表資料有誤。`;
+      notice.textContent = `✓ 已透過你瀏覽器即時連線農業部API，取得最新交易日期 ${formatDateTW(latest.date)} 的資料（下方「價格榜」即為此即時資料）。上方統計筆數／魚種數／市場數仍是每日排程備份的靜態統計（最後備份於 ${formatDateTime(meta.generatedAt)}，涵蓋至 ${meta.dateRange.end}），這兩者本來就會有落差，屬正常現象，不代表資料有誤。`;
     } else if (ageDays > 3) {
       notice.textContent = `⚠️ 靜態備份已經 ${ageDays.toFixed(1)} 天沒有更新（上次產生時間：${formatDateTime(meta.generatedAt)}），且瀏覽器即時抓取這次也失敗了，這通常代表來源網站暫時連不上，可稍後重新整理再試一次。`;
     } else {
       notice.textContent = `資料最後更新於 ${formatDateTime(meta.generatedAt)}，涵蓋 ${meta.dateRange.start} ~ ${meta.dateRange.end}（其中有交易紀錄的天數：${meta.datesWithData.length} 天，週末與國定假日通常無資料屬正常現象）。`;
     }
 
-    document.getElementById("latest-caption").textContent = `${formatDateTW(latest.date)} 全市場交易快照（含消費地與產地市場），依「與上一個有交易紀錄日期」相比的跌幅排序，跌最多、最需要出清的排最前面（共 ${latest.records.length} 筆，僅顯示前 15 筆）`;
+    document.getElementById("board-date").textContent = `（最新交易日 ${formatDateTW(latest.date)}）`;
+    document.getElementById("latest-caption").textContent = `全市場交易快照（含消費地與產地市場），依「與上一個有交易紀錄日期」相比的跌幅排序，跌最多的排最前面（共 ${latest.records.length} 筆，僅顯示前 15 筆）`;
     const tbody = document.getElementById("latest-tbody");
     if (latest.records.length === 0) {
       tbody.innerHTML = `<tr><td colspan="8" class="empty-state">尚無資料</td></tr>`;
     } else {
-      tbody.innerHTML = latest.records.slice(0, 15).map((r, i) => `
+      tbody.innerHTML = latest.records.slice(0, 15).map((r) => `
         <tr>
           <td>${r.market}${marketTypeBadge(r)}</td>
-          <td>${i < 3 && r.direction === "down" ? '<span class="urgent-badge">急售</span>' : ""}${r.speciesName}${farmedSustainBadges(r)}</td>
+          <td>${r.isUrgent ? '<span class="urgent-badge">急售</span>' : ""}${r.speciesName}${farmedSustainBadges(r)}</td>
           <td>${money(r.avgPrice)}</td>
           <td>${priceChangeBadge(r)}</td>
           <td>${money(r.priceHigh)}</td>
