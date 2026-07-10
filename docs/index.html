@@ -56,7 +56,7 @@
 
 <footer class="site-footer">
   資料來源：<a href="https://data.moa.gov.tw/open_detail.aspx?id=039" target="_blank" rel="noopener">農業部漁業署漁產品交易行情OpenData</a>、
-  農業部漁業署《年年有魚》漁業月曆。本站資料由 GitHub Actions 排程自動更新，實際更新時間請見上方頁面提示。
+  農業部漁業署《年年有魚》漁業月曆。「今日價格榜」由你的瀏覽器即時連線政府API取得（失敗時退回靜態資料）；其餘統計與「魚價查詢」頁使用每日排程自動備份的靜態資料，實際更新時間請見上方頁面提示。
 </footer>
 
 <script src="assets/js/common.js"></script>
@@ -64,28 +64,13 @@
 (async function () {
   try {
     const meta = await DataAPI.getMeta();
-    const grid = document.getElementById("stat-grid");
-    grid.innerHTML = `
-      <div class="stat-card"><div class="num">${meta.recordCount.toLocaleString()}</div><div class="label">交易紀錄筆數</div></div>
-      <div class="stat-card"><div class="num">${meta.speciesCount}</div><div class="label">魚種代碼數</div></div>
-      <div class="stat-card"><div class="num">${meta.marketCount}</div><div class="label">市場數</div></div>
-      <div class="stat-card"><div class="num">${formatDateTW(meta.latestDate)}</div><div class="label">最新資料日期</div></div>
-    `;
-
-    const notice = document.getElementById("update-notice");
-    const generated = new Date(meta.generatedAt);
-    const ageDays = (Date.now() - generated.getTime()) / (1000 * 60 * 60 * 24);
-    notice.style.display = "block";
-    if (ageDays > 3) {
-      notice.textContent = `⚠️ 資料已經 ${ageDays.toFixed(1)} 天沒有更新（上次產生時間：${formatDateTime(meta.generatedAt)}）。這通常代表 GitHub Actions 排程抓取被來源網站擋下，可以到 Actions 頁籤查看失敗紀錄。`;
-    } else {
-      notice.textContent = `資料最後更新於 ${formatDateTime(meta.generatedAt)}，涵蓋 ${meta.dateRange.start} ~ ${meta.dateRange.end}（其中有交易紀錄的天數：${meta.datesWithData.length} 天，週末與國定假日通常無資料屬正常現象）。`;
-    }
 
     // 今日價格榜：先嘗試瀏覽器直接呼叫政府API抓即時資料（原理同 hsuchihting 的網站，
     // 用訪客自己的網路IP去要資料，不會被GitHub Actions會遇到的防護機制擋下），失敗才退回靜態latest.json
+    // 這段刻意放在最前面，因為下面的統計卡片／黃色提示區也要用即時抓到的最新日期，避免跟即時榜單日期矛盾。
     const liveStatusEl = document.getElementById("live-status");
     let latest;
+    let liveOk = false;
     try {
       const [liveRows, speciesList, staticHistory] = await Promise.all([
         fetchLiveAquaticRows(10),
@@ -95,6 +80,7 @@
       const liveLatest = buildLiveLatest(staticHistory, liveRows, speciesList);
       if (!liveLatest.date || liveLatest.records.length === 0) throw new Error("即時資料為空");
       latest = liveLatest;
+      liveOk = true;
       liveStatusEl.textContent = "✓ 即時資料";
       liveStatusEl.className = "live";
     } catch (err) {
@@ -103,6 +89,30 @@
       liveStatusEl.textContent = "使用靜態備援資料";
       liveStatusEl.className = "fallback";
     }
+
+    const liveIsNewer = liveOk && latest.date > meta.latestDate;
+    const effectiveLatestDate = liveIsNewer ? latest.date : meta.latestDate;
+
+    const grid = document.getElementById("stat-grid");
+    grid.innerHTML = `
+      <div class="stat-card"><div class="num">${meta.recordCount.toLocaleString()}</div><div class="label">交易紀錄筆數（每日靜態備份）</div></div>
+      <div class="stat-card"><div class="num">${meta.speciesCount}</div><div class="label">魚種代碼數</div></div>
+      <div class="stat-card"><div class="num">${meta.marketCount}</div><div class="label">市場數</div></div>
+      <div class="stat-card"><div class="num">${formatDateTW(effectiveLatestDate)}</div><div class="label">最新資料日期${liveIsNewer ? "（即時）" : ""}</div></div>
+    `;
+
+    const notice = document.getElementById("update-notice");
+    const generated = new Date(meta.generatedAt);
+    const ageDays = (Date.now() - generated.getTime()) / (1000 * 60 * 60 * 24);
+    notice.style.display = "block";
+    if (liveIsNewer) {
+      notice.textContent = `✓ 已透過你瀏覽器即時連線農業部API，取得最新交易日期 ${formatDateTW(latest.date)} 的資料（下方「今日價格榜」即為此即時資料）。上方統計筆數／魚種數／市場數仍是每日排程備份的靜態統計（最後備份於 ${formatDateTime(meta.generatedAt)}，涵蓋至 ${meta.dateRange.end}），這兩者本來就會有落差，屬正常現象，不代表資料有誤。`;
+    } else if (ageDays > 3) {
+      notice.textContent = `⚠️ 靜態備份已經 ${ageDays.toFixed(1)} 天沒有更新（上次產生時間：${formatDateTime(meta.generatedAt)}），且瀏覽器即時抓取這次也失敗了，這通常代表來源網站暫時連不上，可稍後重新整理再試一次。`;
+    } else {
+      notice.textContent = `資料最後更新於 ${formatDateTime(meta.generatedAt)}，涵蓋 ${meta.dateRange.start} ~ ${meta.dateRange.end}（其中有交易紀錄的天數：${meta.datesWithData.length} 天，週末與國定假日通常無資料屬正常現象）。`;
+    }
+
     document.getElementById("latest-caption").textContent = `${formatDateTW(latest.date)} 全市場交易快照（含消費地與產地市場），依「與上一個有交易紀錄日期」相比的跌幅排序，跌最多、最需要出清的排最前面（共 ${latest.records.length} 筆，僅顯示前 15 筆）`;
     const tbody = document.getElementById("latest-tbody");
     if (latest.records.length === 0) {
