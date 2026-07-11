@@ -42,6 +42,12 @@
     "sustainability": null
   },
   {
+    "code": 1026,
+    "name": "鯁魚",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
     "code": 1027,
     "name": "烏鰡",
     "farmed": true,
@@ -132,6 +138,12 @@
     "sustainability": null
   },
   {
+    "code": 1101,
+    "name": "土剎",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
     "code": 1102,
     "name": "泥鰍",
     "farmed": true,
@@ -196,6 +208,12 @@
     "name": "黃花",
     "farmed": true,
     "sustainability": "red"
+  },
+  {
+    "code": 1168,
+    "name": "花身",
+    "farmed": true,
+    "sustainability": null
   },
   {
     "code": 1169,
@@ -558,6 +576,12 @@
     "sustainability": null
   },
   {
+    "code": 2102,
+    "name": "青鱗",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 2103,
     "name": "鱙仔",
     "farmed": false,
@@ -580,6 +604,12 @@
     "name": "其他鰮類",
     "farmed": false,
     "sustainability": null
+  },
+  {
+    "code": 2110,
+    "name": "加工用太平洋黑鮪",
+    "farmed": false,
+    "sustainability": "red"
   },
   {
     "code": 2111,
@@ -1254,6 +1284,12 @@
     "sustainability": null
   },
   {
+    "code": 3071,
+    "name": "四破(凍)",
+    "farmed": false,
+    "sustainability": "green"
+  },
+  {
     "code": 3074,
     "name": "巴闌(凍)",
     "farmed": false,
@@ -1500,6 +1536,12 @@
     "sustainability": null
   },
   {
+    "code": 3191,
+    "name": "龍尖、青嘴凍",
+    "farmed": false,
+    "sustainability": "red"
+  },
+  {
     "code": 3203,
     "name": "紅條(凍)",
     "farmed": false,
@@ -1689,6 +1731,12 @@
     "code": 4011,
     "name": "草蝦海",
     "farmed": false,
+    "sustainability": "yellow"
+  },
+  {
+    "code": 4012,
+    "name": "草蝦養",
+    "farmed": true,
     "sustainability": "yellow"
   },
   {
