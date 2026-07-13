@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-07-12T23:30:23+00:00",
+  "generatedAt": "2026-07-13T23:30:26+00:00",
   "sourceFiles": [
     "data/raw/aquatic_20260609_20260706.json",
     "data/raw/aquatic_20260630_20260706.json",
     "data/raw/aquatic_worker_live.json",
     "/tmp/incoming/latest.json"
   ],
-  "recordCount": 16457,
+  "recordCount": 16551,
   "dateRange": {
     "start": "2026-06-09",
-    "end": "2026-07-10"
+    "end": "2026-07-13"
   },
   "datesWithData": [
     "2026-06-09",
@@ -32,11 +32,12 @@
     "2026-07-07",
     "2026-07-08",
     "2026-07-09",
-    "2026-07-10"
+    "2026-07-10",
+    "2026-07-13"
   ],
-  "latestDate": "2026-07-10",
-  "speciesCount": 351,
-  "marketCount": 21,
+  "latestDate": "2026-07-13",
+  "speciesCount": 356,
+  "marketCount": 22,
   "note": "資料來源：農業部漁業署漁產品交易行情OpenData。該網站對自動化請求有防護機制，本專案以GitHub Actions排程抓取，若排程連續失敗會保留舊資料，請留意 generatedAt 與 latestDate 是否持續更新。",
   "marketTypeNote": "市場分為「消費地」（依efish.fa.gov.tw公開的13個消費地魚市場名單）與「產地」（其餘漁港/批發市場）。",
   "farmedSustainabilityNote": "養殖(farmed)欄位優先依資料本身命名的養/海標記判斷，其次依代碼區間（1000-1999為養殖魚類分類）；永續(sustainability)欄位為與《臺灣海鮮選擇指南 2023.10》粗略關鍵字比對結果（green建議食用/yellow斟酌食用/red避免食用），非逐魚種官方認證，僅供參考，詳見 data/seafood_guide_reference.json。"

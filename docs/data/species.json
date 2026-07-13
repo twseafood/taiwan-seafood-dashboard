@@ -1350,6 +1350,12 @@
     "sustainability": null
   },
   {
+    "code": 3114,
+    "name": "太平洋黑鮪(凍)",
+    "farmed": false,
+    "sustainability": "red"
+  },
+  {
     "code": 3116,
     "name": "南方黑鮪(凍)",
     "farmed": false,
@@ -1574,6 +1580,12 @@
   {
     "code": 3291,
     "name": "暑魚凍",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
+    "code": 3301,
+    "name": "尖梭(凍)",
     "farmed": false,
     "sustainability": null
   },
@@ -2088,8 +2100,26 @@
     "sustainability": null
   },
   {
+    "code": 6154,
+    "name": "水鯊胃袋【凍】",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
     "code": 6156,
     "name": "馬加鯊翅【凍】",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 6183,
+    "name": "深海狐鮫【凍】",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 6184,
+    "name": "深海狐鮫翅【凍】",
     "farmed": null,
     "sustainability": null
   },
