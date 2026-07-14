@@ -1644,6 +1644,12 @@
     "sustainability": "yellow"
   },
   {
+    "code": 3451,
+    "name": "金鼓(凍)",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3512,
     "name": "加志(凍)",
     "farmed": false,
@@ -1950,6 +1956,12 @@
     "sustainability": null
   },
   {
+    "code": 5092,
+    "name": "蜆(養)",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
     "code": 5101,
     "name": "竹蟶海",
     "farmed": false,
@@ -2108,6 +2120,12 @@
   {
     "code": 6156,
     "name": "馬加鯊翅【凍】",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 6160,
+    "name": "馬加舅【凍】",
     "farmed": null,
     "sustainability": null
   },
