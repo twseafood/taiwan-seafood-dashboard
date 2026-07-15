@@ -1326,6 +1326,12 @@
     "sustainability": null
   },
   {
+    "code": 3105,
+    "name": "丁香(凍)",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3106,
     "name": "勿仔(凍)",
     "farmed": false,
@@ -1732,6 +1738,12 @@
     "name": "紅皮刀凍",
     "farmed": false,
     "sustainability": "red"
+  },
+  {
+    "code": 3998,
+    "name": "干貝凍",
+    "farmed": false,
+    "sustainability": null
   },
   {
     "code": 3999,
