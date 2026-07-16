@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-07-15T23:31:07+00:00",
+  "generatedAt": "2026-07-16T23:31:09+00:00",
   "sourceFiles": [
     "data/raw/aquatic_20260609_20260706.json",
     "data/raw/aquatic_20260630_20260706.json",
     "data/raw/aquatic_worker_live.json",
     "/tmp/incoming/latest.json"
   ],
-  "recordCount": 18346,
+  "recordCount": 19098,
   "dateRange": {
     "start": "2026-06-09",
-    "end": "2026-07-15"
+    "end": "2026-07-16"
   },
   "datesWithData": [
     "2026-06-09",
@@ -35,10 +35,11 @@
     "2026-07-10",
     "2026-07-13",
     "2026-07-14",
-    "2026-07-15"
+    "2026-07-15",
+    "2026-07-16"
   ],
-  "latestDate": "2026-07-15",
-  "speciesCount": 361,
+  "latestDate": "2026-07-16",
+  "speciesCount": 362,
   "marketCount": 23,
   "note": "資料來源：農業部漁業署漁產品交易行情OpenData。該網站對自動化請求有防護機制，本專案以GitHub Actions排程抓取，若排程連續失敗會保留舊資料，請留意 generatedAt 與 latestDate 是否持續更新。",
   "marketTypeNote": "市場分為「消費地」（依efish.fa.gov.tw公開的13個消費地魚市場名單）與「產地」（其餘漁港/批發市場）。",
