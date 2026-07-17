@@ -1644,6 +1644,12 @@
     "sustainability": "green"
   },
   {
+    "code": 3391,
+    "name": "咬狗(凍)",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3401,
     "name": "扁魚(凍)",
     "farmed": false,
