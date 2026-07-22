@@ -1668,6 +1668,12 @@
     "sustainability": null
   },
   {
+    "code": 3491,
+    "name": "海鱺(凍)",
+    "farmed": false,
+    "sustainability": "yellow"
+  },
+  {
     "code": 3512,
     "name": "加志(凍)",
     "farmed": false,
