@@ -1260,6 +1260,12 @@
     "sustainability": "yellow"
   },
   {
+    "code": 3019,
+    "name": "其他鯛類(凍)",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3021,
     "name": "金線(凍)",
     "farmed": false,
