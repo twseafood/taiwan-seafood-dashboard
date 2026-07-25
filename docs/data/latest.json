@@ -7515,7 +7515,7 @@
       "sustainability": null,
       "lowVolume": false,
       "prevDate": "2026-07-20",
-      "prevAvgPrice": 65.0,
+      "prevAvgPrice": 65,
       "changeAbs": -5.0,
       "changePct": -7.69,
       "direction": "down",
