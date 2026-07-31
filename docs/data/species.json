@@ -54,6 +54,12 @@
     "sustainability": null
   },
   {
+    "code": 1029,
+    "name": "其他鯉類",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
     "code": 1031,
     "name": "白鰻",
     "farmed": true,
@@ -1434,6 +1440,12 @@
     "sustainability": null
   },
   {
+    "code": 3137,
+    "name": "紅肉丁挽(短吻旗魚)",
+    "farmed": false,
+    "sustainability": "yellow"
+  },
+  {
     "code": 3139,
     "name": "其他旗魚(凍)",
     "farmed": false,
@@ -1902,6 +1914,12 @@
     "sustainability": null
   },
   {
+    "code": 4405,
+    "name": "白丁蝦、日本玻璃蝦",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
     "code": 4408,
     "name": "石蟳",
     "farmed": null,
@@ -2094,6 +2112,12 @@
     "sustainability": null
   },
   {
+    "code": 6052,
+    "name": "烏魚子",
+    "farmed": null,
+    "sustainability": "green"
+  },
+  {
     "code": 6071,
     "name": "熟丁香",
     "farmed": null,
@@ -2168,6 +2192,18 @@
   {
     "code": 6160,
     "name": "馬加舅【凍】",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 6168,
+    "name": "紅肉阿髻鮫【凍】",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 6169,
+    "name": "紅肉阿髻鮫翅【凍】",
     "farmed": null,
     "sustainability": null
   },
