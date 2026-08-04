@@ -1746,6 +1746,12 @@
     "sustainability": "yellow"
   },
   {
+    "code": 3642,
+    "name": "圓鱈、智利海鱸",
+    "farmed": false,
+    "sustainability": "red"
+  },
+  {
     "code": 3660,
     "name": "魚腸(凍)",
     "farmed": false,
