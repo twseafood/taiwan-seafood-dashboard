@@ -1266,6 +1266,12 @@
     "sustainability": "yellow"
   },
   {
+    "code": 3015,
+    "name": "黑鯛(凍)",
+    "farmed": false,
+    "sustainability": "yellow"
+  },
+  {
     "code": 3019,
     "name": "其他鯛類(凍)",
     "farmed": false,
