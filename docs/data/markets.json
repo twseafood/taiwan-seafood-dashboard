@@ -1,57 +1,63 @@
 [
   {
     "name": "埔心",
-    "count": 3538,
+    "count": 3643,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "台中",
-    "count": 3156,
+    "count": 3259,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "新竹",
-    "count": 2862,
+    "count": 2953,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "台北",
-    "count": 2849,
+    "count": 2941,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "彰化",
-    "count": 2834,
+    "count": 2915,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "桃園",
-    "count": 2820,
+    "count": 2909,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "嘉義",
-    "count": 2188,
+    "count": 2263,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "斗南",
-    "count": 1660,
+    "count": 1712,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "苗栗",
-    "count": 1236,
+    "count": 1276,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
+  },
+  {
+    "name": "台南",
+    "count": 1197,
+    "firstDate": "2026-06-09",
+    "lastDate": "2026-08-06"
   },
   {
     "name": "梓官",
@@ -60,34 +66,28 @@
     "lastDate": "2026-07-31"
   },
   {
-    "name": "台南",
-    "count": 1145,
-    "firstDate": "2026-06-09",
-    "lastDate": "2026-07-31"
-  },
-  {
     "name": "岡山",
-    "count": 807,
+    "count": 834,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "三重",
-    "count": 686,
+    "count": 699,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "新營",
-    "count": 644,
+    "count": 658,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "佳里",
-    "count": 584,
+    "count": 601,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-08-05"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "高雄",
@@ -97,9 +97,9 @@
   },
   {
     "name": "澎湖",
-    "count": 463,
+    "count": 492,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-07-31"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "新港",
@@ -109,15 +109,15 @@
   },
   {
     "name": "基隆",
-    "count": 129,
+    "count": 135,
     "firstDate": "2026-06-10",
-    "lastDate": "2026-08-04"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "興達港",
-    "count": 104,
+    "count": 125,
     "firstDate": "2026-06-12",
-    "lastDate": "2026-07-31"
+    "lastDate": "2026-08-06"
   },
   {
     "name": "花蓮",
