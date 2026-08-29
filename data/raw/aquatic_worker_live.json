@@ -2,7 +2,7 @@
   "meta": {
     "source_url": "https://data.moa.gov.tw/Service/OpenData/FromM/AquaticTransData.aspx",
     "fetched_by": "cloudflare-worker",
-    "fetched_at": "2026-08-29T09:26:46.920Z",
+    "fetched_at": "2026-08-29T09:28:22.622Z",
     "start_date_ad": "2026-08-19",
     "end_date_ad": "2026-08-29",
     "row_count": 5795
