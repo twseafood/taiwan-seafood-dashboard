@@ -336,6 +336,12 @@
     "sustainability": "yellow"
   },
   {
+    "code": 2016,
+    "name": "白鯛",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 2017,
     "name": "花身",
     "farmed": false,
@@ -912,6 +918,12 @@
     "sustainability": null
   },
   {
+    "code": 2238,
+    "name": "海鯽魚",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 2242,
     "name": "變身苦",
     "farmed": false,
@@ -1294,6 +1306,12 @@
     "name": "紅目鰱(凍)",
     "farmed": false,
     "sustainability": "yellow"
+  },
+  {
+    "code": 3064,
+    "name": "白口(凍)",
+    "farmed": false,
+    "sustainability": null
   },
   {
     "code": 3067,
@@ -1692,6 +1710,12 @@
     "sustainability": null
   },
   {
+    "code": 3481,
+    "name": "英哥凍",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3491,
     "name": "海鱺(凍)",
     "farmed": false,
@@ -1724,6 +1748,12 @@
   {
     "code": 3570,
     "name": "剝皮魚（黑達仔）凍",
+    "farmed": false,
+    "sustainability": "green"
+  },
+  {
+    "code": 3571,
+    "name": "剝皮魚(凍)",
     "farmed": false,
     "sustainability": "green"
   },
