@@ -10804,7 +10804,7 @@
       "sustainability": null,
       "lowVolume": false,
       "prevDate": "2026-08-31",
-      "prevAvgPrice": 250.0,
+      "prevAvgPrice": 250,
       "changeAbs": 0.0,
       "changePct": 0.0,
       "direction": "flat",
