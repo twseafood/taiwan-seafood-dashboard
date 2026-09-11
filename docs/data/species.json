@@ -2046,6 +2046,12 @@
     "sustainability": "green"
   },
   {
+    "code": 5032,
+    "name": "蜊(養)",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
     "code": 5042,
     "name": "血蚶(養)",
     "farmed": true,
