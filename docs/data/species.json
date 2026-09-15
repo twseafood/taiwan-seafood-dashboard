@@ -1338,6 +1338,12 @@
     "sustainability": null
   },
   {
+    "code": 3078,
+    "name": "青魽(凍)",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3081,
     "name": "油魽凍",
     "farmed": false,
@@ -1724,6 +1730,12 @@
   {
     "code": 3491,
     "name": "海鱺(凍)",
+    "farmed": false,
+    "sustainability": "yellow"
+  },
+  {
+    "code": 3501,
+    "name": "赤筆(凍)",
     "farmed": false,
     "sustainability": "yellow"
   },
