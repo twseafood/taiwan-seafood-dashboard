@@ -1494,6 +1494,12 @@
     "sustainability": "red"
   },
   {
+    "code": 3143,
+    "name": "白北(凍)",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3145,
     "name": "石喬(凍)",
     "farmed": false,
@@ -2082,6 +2088,12 @@
     "sustainability": "green"
   },
   {
+    "code": 5054,
+    "name": "扇貝",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
     "code": 5061,
     "name": "鐘螺(海)",
     "farmed": false,
@@ -2108,6 +2120,12 @@
   {
     "code": 5888,
     "name": "海瓜子",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 5889,
+    "name": "花蚧子",
     "farmed": null,
     "sustainability": null
   },
