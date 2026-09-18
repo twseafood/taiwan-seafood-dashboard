@@ -2100,6 +2100,12 @@
     "sustainability": null
   },
   {
+    "code": 5081,
+    "name": "日月蟶(海)",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 5092,
     "name": "蜆(養)",
     "farmed": true,
