@@ -678,6 +678,12 @@
     "sustainability": null
   },
   {
+    "code": 2123,
+    "name": "圓花鰹",
+    "farmed": false,
+    "sustainability": "green"
+  },
+  {
     "code": 2124,
     "name": "煙仔虎",
     "farmed": false,
