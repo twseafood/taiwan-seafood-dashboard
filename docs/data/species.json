@@ -1356,6 +1356,12 @@
     "sustainability": null
   },
   {
+    "code": 3079,
+    "name": "紅魽(凍)",
+    "farmed": false,
+    "sustainability": "green"
+  },
+  {
     "code": 3081,
     "name": "油魽凍",
     "farmed": false,
