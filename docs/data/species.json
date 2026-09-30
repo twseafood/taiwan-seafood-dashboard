@@ -1260,6 +1260,12 @@
     "sustainability": null
   },
   {
+    "code": 2997,
+    "name": "待訂",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 2998,
     "name": "干貝",
     "farmed": false,
@@ -1710,6 +1716,12 @@
     "sustainability": null
   },
   {
+    "code": 3325,
+    "name": "油甘肚【凍】",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3331,
     "name": "鯖魚(凍)",
     "farmed": false,
@@ -1720,6 +1732,12 @@
     "name": "（日本）白帶魚凍",
     "farmed": false,
     "sustainability": "green"
+  },
+  {
+    "code": 3351,
+    "name": "鱝(魴仔)(凍)",
+    "farmed": false,
+    "sustainability": null
   },
   {
     "code": 3391,
