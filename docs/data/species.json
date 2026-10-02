@@ -2010,6 +2010,12 @@
     "sustainability": null
   },
   {
+    "code": 4401,
+    "name": "火燒蝦",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
     "code": 4404,
     "name": "蝦母、東方異腕蝦",
     "farmed": null,
@@ -2246,6 +2252,12 @@
   {
     "code": 6052,
     "name": "烏魚子",
+    "farmed": null,
+    "sustainability": "green"
+  },
+  {
+    "code": 6061,
+    "name": "熟四破",
     "farmed": null,
     "sustainability": "green"
   },
