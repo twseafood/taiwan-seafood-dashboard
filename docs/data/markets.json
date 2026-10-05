@@ -84,15 +84,15 @@
     "lastDate": "2026-10-02"
   },
   {
+    "name": "高雄",
+    "count": 954,
+    "firstDate": "2026-06-10",
+    "lastDate": "2026-10-05"
+  },
+  {
     "name": "佳里",
     "count": 948,
     "firstDate": "2026-06-09",
-    "lastDate": "2026-10-02"
-  },
-  {
-    "name": "高雄",
-    "count": 930,
-    "firstDate": "2026-06-10",
     "lastDate": "2026-10-02"
   },
   {
@@ -108,16 +108,16 @@
     "lastDate": "2026-09-10"
   },
   {
+    "name": "基隆",
+    "count": 197,
+    "firstDate": "2026-06-10",
+    "lastDate": "2026-10-05"
+  },
+  {
     "name": "興達港",
     "count": 197,
     "firstDate": "2026-06-12",
     "lastDate": "2026-09-29"
-  },
-  {
-    "name": "基隆",
-    "count": 194,
-    "firstDate": "2026-06-10",
-    "lastDate": "2026-09-30"
   },
   {
     "name": "花蓮",
