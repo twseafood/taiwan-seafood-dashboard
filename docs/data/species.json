@@ -930,6 +930,12 @@
     "sustainability": null
   },
   {
+    "code": 2241,
+    "name": "石鯽",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 2242,
     "name": "變身苦",
     "farmed": false,
@@ -1012,6 +1018,12 @@
     "name": "（日本）白帶魚",
     "farmed": false,
     "sustainability": "green"
+  },
+  {
+    "code": 2342,
+    "name": "黃目帶",
+    "farmed": false,
+    "sustainability": null
   },
   {
     "code": 2351,
@@ -1208,6 +1220,12 @@
   {
     "code": 2601,
     "name": "烏母",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
+    "code": 2603,
+    "name": "烏殼",
     "farmed": false,
     "sustainability": null
   },
@@ -1612,6 +1630,12 @@
     "name": "小卷(凍)",
     "farmed": false,
     "sustainability": "green"
+  },
+  {
+    "code": 3168,
+    "name": "目斗(凍)",
+    "farmed": false,
+    "sustainability": null
   },
   {
     "code": 3169,
