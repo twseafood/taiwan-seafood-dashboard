@@ -1224,6 +1224,12 @@
     "sustainability": null
   },
   {
+    "code": 2602,
+    "name": "烏公",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 2603,
     "name": "烏殼",
     "farmed": false,
