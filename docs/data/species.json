@@ -798,6 +798,12 @@
     "sustainability": null
   },
   {
+    "code": 2154,
+    "name": "鯊翅",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 2155,
     "name": "角鯊",
     "farmed": false,
@@ -908,6 +914,12 @@
   {
     "code": 2211,
     "name": "狗母",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
+    "code": 2212,
+    "name": "花狗母",
     "farmed": false,
     "sustainability": null
   },
@@ -1348,6 +1360,12 @@
     "name": "紅目鰱(凍)",
     "farmed": false,
     "sustainability": "yellow"
+  },
+  {
+    "code": 3063,
+    "name": "黑口(凍)",
+    "farmed": false,
+    "sustainability": null
   },
   {
     "code": 3064,
@@ -2066,6 +2084,12 @@
   {
     "code": 4408,
     "name": "石蟳",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 4409,
+    "name": "牛角蟹、黃金蟹",
     "farmed": null,
     "sustainability": null
   },
