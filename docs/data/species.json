@@ -294,6 +294,18 @@
     "sustainability": "green"
   },
   {
+    "code": 1601,
+    "name": "烏母(養)",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
+    "code": 1603,
+    "name": "烏殼(養)",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
     "code": 1799,
     "name": "其他黃花",
     "farmed": true,
