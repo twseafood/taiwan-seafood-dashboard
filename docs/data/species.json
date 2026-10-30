@@ -300,6 +300,12 @@
     "sustainability": null
   },
   {
+    "code": 1602,
+    "name": "烏公(養)",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
     "code": 1603,
     "name": "烏殼(養)",
     "farmed": true,
