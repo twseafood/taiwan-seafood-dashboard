@@ -468,6 +468,12 @@
     "sustainability": null
   },
   {
+    "code": 2069,
+    "name": "其他黃花",
+    "farmed": false,
+    "sustainability": "red"
+  },
+  {
     "code": 2071,
     "name": "四破",
     "farmed": false,
