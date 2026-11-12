@@ -180,6 +180,12 @@
     "sustainability": null
   },
   {
+    "code": 1161,
+    "name": "加鱲",
+    "farmed": true,
+    "sustainability": null
+  },
+  {
     "code": 1162,
     "name": "赤翅",
     "farmed": true,
