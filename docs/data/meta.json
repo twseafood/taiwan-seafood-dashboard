@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-11-12T23:30:55+00:00",
+  "generatedAt": "2026-11-13T23:30:39+00:00",
   "sourceFiles": [
     "data/raw/aquatic_20260609_20260706.json",
     "data/raw/aquatic_20260630_20260706.json",
     "data/raw/aquatic_worker_live.json",
     "/tmp/incoming/latest.json"
   ],
-  "recordCount": 72665,
+  "recordCount": 73747,
   "dateRange": {
     "start": "2026-06-09",
-    "end": "2026-11-12"
+    "end": "2026-11-13"
   },
   "datesWithData": [
     "2026-06-09",
@@ -103,9 +103,10 @@
     "2026-11-09",
     "2026-11-10",
     "2026-11-11",
-    "2026-11-12"
+    "2026-11-12",
+    "2026-11-13"
   ],
-  "latestDate": "2026-11-12",
+  "latestDate": "2026-11-13",
   "speciesCount": 412,
   "marketCount": 23,
   "note": "資料來源：農業部漁業署漁產品交易行情OpenData。該網站對自動化請求有防護機制，本專案以GitHub Actions排程抓取，若排程連續失敗會保留舊資料，請留意 generatedAt 與 latestDate 是否持續更新。",
