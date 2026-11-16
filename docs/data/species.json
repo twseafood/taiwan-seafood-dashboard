@@ -330,6 +330,12 @@
     "sustainability": null
   },
   {
+    "code": 2010,
+    "name": "美軟魚、大面側仔",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 2011,
     "name": "加鱲",
     "farmed": false,
@@ -806,6 +812,12 @@
   {
     "code": 2146,
     "name": "闊北",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
+    "code": 2150,
+    "name": "狐鯊",
     "farmed": false,
     "sustainability": null
   },
@@ -1578,6 +1590,12 @@
     "sustainability": "yellow"
   },
   {
+    "code": 3138,
+    "name": "長吻旗魚",
+    "farmed": false,
+    "sustainability": "yellow"
+  },
+  {
     "code": 3139,
     "name": "其他旗魚(凍)",
     "farmed": false,
@@ -1842,6 +1860,12 @@
     "sustainability": "yellow"
   },
   {
+    "code": 3431,
+    "name": "厚唇(凍)",
+    "farmed": false,
+    "sustainability": null
+  },
+  {
     "code": 3440,
     "name": "石狗公凍",
     "farmed": false,
@@ -2102,6 +2126,12 @@
   {
     "code": 4401,
     "name": "火燒蝦",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 4402,
+    "name": "長角鬥士赤蝦",
     "farmed": null,
     "sustainability": null
   },
@@ -2462,6 +2492,12 @@
   {
     "code": 6188,
     "name": "黑鯊翅【凍】",
+    "farmed": null,
+    "sustainability": null
+  },
+  {
+    "code": 6194,
+    "name": "其他白眼鮫【凍】",
     "farmed": null,
     "sustainability": null
   },
